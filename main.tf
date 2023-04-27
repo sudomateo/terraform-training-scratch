@@ -1,11 +1,6 @@
 terraform {
   # Partial backend configuration.
-  # backend "s3" {
-  #   bucket         = "terraform-training20230426161451011500000001"
-  #   key            = "terraform/states/vm"
-  #   region         = "us-east-1"
-  #   dynamodb_table = "terraform-training"
-  # }
+  backend "s3" {}
 
   required_providers {
     aws = {
