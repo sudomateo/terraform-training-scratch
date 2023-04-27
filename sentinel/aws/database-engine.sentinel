@@ -1,0 +1,19 @@
+import "tfplan/v2" as tfplan
+
+param allowed_db_instance_engines default [ "postgres" ]
+
+# Get all `aws_db_instance` resources from all modules.
+db_instances = filter tfplan.resource_changes as _, rc {
+    rc.type is "aws_db_instance"
+}
+
+# Check if each `aws_db_instance` resource is using an allowed database engine.
+db_instance_engine_allowed = rule {
+    all db_instances as _, db_instance {
+        db_instance.change.after.engine in allowed_db_instance_engines
+    }
+}
+
+main = rule {
+    db_instance_engine_allowed
+}
