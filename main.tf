@@ -1,4 +1,12 @@
 terraform {
+  cloud {
+    organization = "sudomateo"
+
+    workspaces {
+      name = "todo-prod"
+    }
+  }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -16,7 +24,7 @@ module "todo" {
   ingress_port   = 8888
 
   app = {
-    version = "dev"
+    version = "1.0.0"
   }
 
   db = {
