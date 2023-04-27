@@ -1,7 +1,4 @@
 terraform {
-  # Partial backend configuration.
-  backend "s3" {}
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -10,31 +7,24 @@ terraform {
   }
 }
 
-# Configured via environment variables.
 provider "aws" {}
 
-resource "aws_key_pair" "sudomateo" {
-  key_name_prefix = "sudomateo"
-  public_key      = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIETEma9o59PQm3venxMkocCM8mifE0hspFm5XsYeccw8"
-}
+module "todo" {
+  source = "github.com/sudomateo/terraform-aws-terraform-training-todo?ref=main"
 
-module "sudomateo_vm" {
-  source = "github.com/sudomateo/terraform-aws-terraform-training-vm?ref=main"
+  ssh_public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIInO4M/dxw0LD+3tKUG39z2FokczSQumYUBYmYE3/tXb vm-fedora"
+  ingress_port   = 8888
 
-  for_each = {
-    foo = {
-      ingress_rules = [
-        {
-          description = "SSH"
-          from_port   = 22
-          to_port     = 22
-          protocol    = "tcp"
-        },
-      ]
-    }
+  app = {
+    version = "dev"
   }
 
-  name          = each.key
-  key_name      = aws_key_pair.sudomateo.key_name
-  ingress_rules = each.value.ingress_rules
+  db = {
+    password = "ifitsfreeitsterraforme"
+  }
 }
+
+output "app_url" {
+  value = module.todo.app_url
+}
+

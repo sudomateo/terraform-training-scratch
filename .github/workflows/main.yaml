@@ -7,43 +7,23 @@ env:
   TF_IN_AUTOMATION: 1
 
 jobs:
-  # format:
-  #   name: Format
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
-  #     - name: Install Terraform
-  #       uses: hashicorp/setup-terraform@v2
-  #       with:
-  #         terraform_version: 1.4.5
-  #     - name: Check formatting
-  #       run: terraform fmt -check
-
-  # validate:
-  #   name: Validate
-  #   needs: [format]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
-  #     - name: Install Terraform
-  #       uses: hashicorp/setup-terraform@v2
-  #       with:
-  #         terraform_version: 1.4.5
-  #     - name: Initialize configuration
-  #       run: terraform init -input=false -backend=false
-  #     - name: Validate configuration
-  #       run: terraform validate
-
-  plan-apply:
-    name: Plan & Apply
-    # needs: [validate]
+  format:
+    name: Format
     runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: ${{ vars.AWS_REGION }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.5
+      - name: Check formatting
+        run: terraform fmt -check
+
+  validate:
+    name: Validate
+    needs: [format]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -52,13 +32,6 @@ jobs:
         with:
           terraform_version: 1.4.5
       - name: Initialize configuration
-        run: |
-          terraform init -input=false \
-            -backend-config="bucket=${{ vars.S3_BACKEND_BUCKET }}" \
-            -backend-config="key=${{ vars.S3_BACKEND_KEY }}" \
-            -backend-config="dynamodb_table=${{ vars.S3_BACKEND_DYNAMDB_TABLE }}"
-      - name: Plan
-        run: terraform plan -out plan.tfplan -input=false
-      # - name: Apply
-      #   if: ${{ github.ref_name == 'main' }}
-      #   run: terraform apply -input=false plan.tfplan
+        run: terraform init -input=false -backend=false
+      - name: Validate configuration
+        run: terraform validate
