@@ -1,12 +1,11 @@
 terraform {
   # Partial backend configuration.
-  backend "s3" {
-    bucket         = "terraform-training20230426161451011500000001"
-    key            = "terraform/states/vm"
-    region         = "us-east-1"
-    dynamodb_table = "terraform-training"
-  }
-
+  # backend "s3" {
+  #   bucket         = "terraform-training20230426161451011500000001"
+  #   key            = "terraform/states/vm"
+  #   region         = "us-east-1"
+  #   dynamodb_table = "terraform-training"
+  # }
 
   required_providers {
     aws = {
@@ -20,8 +19,8 @@ terraform {
 provider "aws" {}
 
 resource "aws_key_pair" "sudomateo" {
-key_name_prefix = "sudomateo"
-public_key      = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIETEma9o59PQm3venxMkocCM8mifE0hspFm5XsYeccw8"
+  key_name_prefix = "sudomateo"
+  public_key      = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIETEma9o59PQm3venxMkocCM8mifE0hspFm5XsYeccw8"
 }
 
 module "sudomateo_vm" {
