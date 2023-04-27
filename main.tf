@@ -1,12 +1,4 @@
 terraform {
-  cloud {
-    organization = "sudomateo"
-
-    workspaces {
-      name = "todo-prod"
-    }
-  }
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
