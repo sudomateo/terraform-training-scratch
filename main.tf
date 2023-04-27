@@ -20,8 +20,8 @@ terraform {
 provider "aws" {}
 
 resource "aws_key_pair" "sudomateo" {
-  key_name_prefix = "sudomateo"
-  public_key      = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIETEma9o59PQm3venxMkocCM8mifE0hspFm5XsYeccw8"
+key_name_prefix = "sudomateo"
+public_key      = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIETEma9o59PQm3venxMkocCM8mifE0hspFm5XsYeccw8"
 }
 
 module "sudomateo_vm" {
