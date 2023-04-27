@@ -16,7 +16,7 @@ module "todo" {
   ingress_port   = 8888
 
   app = {
-    version = "dev"
+    version = "1.0.0"
   }
 
   db = {
